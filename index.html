@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PackWorks | Packaging Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="startup-loader" class="startup-loader">
+        <div class="loader-shell">
+            <div class="loader-blueprint">
+                <div class="loader-grid"></div>
+                <div class="loader-box loader-box-front"></div>
+                <div class="loader-box loader-box-top"></div>
+                <div class="loader-box loader-box-side"></div>
+                <div class="loader-beam"></div>
+            </div>
+            <img src="assets/packworks_logo.png" alt="PackWorks">
+            <p>Constructing premium packaging intelligence</p>
+        </div>
+    </div>
+
+    <a href="https://wa.me/919988522870" class="floating-whatsapp" target="_blank" rel="noreferrer">
+        <i class="ri-whatsapp-line"></i>
+    </a>
+
+    <button class="ai-assistant-toggle" id="assistantToggle" aria-label="Open PackWorks AI Assistant">
+        <span class="assistant-pulse"></span>
+        <i class="ri-sparkling-2-line"></i>
+        <span>Packaging AI</span>
+    </button>
+
+    <div class="ai-assistant-panel" id="assistantPanel">
+        <div class="assistant-header">
+            <div>
+                <p class="eyebrow">PackWorks AI</p>
+                <h3>Packaging Assistant</h3>
+            </div>
+            <button type="button" id="assistantClose" aria-label="Close assistant"><i class="ri-close-line"></i></button>
+        </div>
+        <div class="assistant-body">
+            <div class="assistant-message">
+                <span class="assistant-avatar"><i class="ri-sparkling-line"></i></span>
+                <p id="assistantReply">Tell me the product type or quantity and I’ll suggest the right packaging setup.</p>
+            </div>
+            <div class="assistant-chips">
+                <button type="button" class="assistant-chip" data-assistant="Suggest premium box dimensions for skincare kits.">Skincare Kit</button>
+                <button type="button" class="assistant-chip" data-assistant="Suggest a kraft packaging setup for food products.">Food Packaging</button>
+                <button type="button" class="assistant-chip" data-assistant="Suggest a luxury rigid box for gifting.">Luxury Gifting</button>
+                <button type="button" class="assistant-chip" data-assistant="Suggest materials for bottle sleeves and labels.">Bottle Branding</button>
+            </div>
+            <div class="assistant-actions">
+                <button type="button" class="btn-secondary assistant-apply" data-type="box">Use In Studio</button>
+                <button type="button" class="btn-outline open-status">Track Project</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-modal" id="statusModal" aria-hidden="true">
+        <div class="status-backdrop" data-close-status></div>
+        <div class="status-panel">
+            <div class="status-panel-header">
+                <div>
+                    <p class="eyebrow">Project Status</p>
+                    <h2>Track Your Packaging Journey</h2>
+                </div>
+                <button type="button" class="status-close" data-close-status aria-label="Close status portal">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+
+            <div class="status-hero-shell">
+                <div class="status-hero-copy">
+                    <p class="eyebrow">Luxury Packaging Journey</p>
+                    <h3>Track your project through a calm, premium production story.</h3>
+                    <p>Follow design, manufacturing, and delivery only after you enter your project details.</p>
+                </div>
+                <div class="status-hero-line">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="status-entry">
+                <div class="status-entry-copy">
+                    <h3>Tracking Access</h3>
+                    <p>Enter your order details to reveal the production journey, snapshot cards, and delivery visualization.</p>
+                </div>
+                <form class="status-track-form" id="statusTrackForm">
+                    <label>
+                        <span>Order ID</span>
+                        <input type="text" id="trackOrderId" placeholder="PWX-2048">
+                    </label>
+                    <label>
+                        <span>Email or Phone Number</span>
+                        <input type="text" id="trackContact" placeholder="email@brand.com">
+                    </label>
+                    <button type="submit" class="btn-primary">Track Project</button>
+                </form>
+            </div>
+
+            <div class="status-empty-state" id="statusEmptyState">
+                <div class="status-empty-card">
+                    <div class="status-empty-visual">
+                        <div class="empty-route">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="empty-package">
+                            <i class="ri-box-3-line"></i>
+                        </div>
+                    </div>
+                    <div class="status-empty-copy">
+                        <h3>Packaging journey ready to unlock</h3>
+                        <p>Enter your Order ID and Email or Phone Number to view the project timeline, client snapshot, and logistics route.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-dashboard" id="statusDashboard" hidden>
+                <div class="status-overview-card">
+                    <div class="status-overview-top">
+                        <div>
+                            <p class="eyebrow">Live Status</p>
+                            <h3 id="statusHeadline">Packaging Journey Active</h3>
+                        </div>
+                        <div class="status-live-indicators">
+                            <span><i class="dot active"></i> Active</span>
+                            <span><i class="dot process"></i> In Process</span>
+                            <span><i class="dot design"></i> Design Phase</span>
+                        </div>
+                    </div>
+
+                    <div class="status-meta-grid">
+                        <div class="status-metric">
+                            <span>Last Updated</span>
+                            <strong id="lastUpdated">-</strong>
+                        </div>
+                        <div class="status-metric">
+                            <span>Expected Delivery</span>
+                            <strong id="expectedDelivery">-</strong>
+                        </div>
+                        <div class="status-metric">
+                            <span>Production Facility</span>
+                            <strong id="facilityName">-</strong>
+                        </div>
+                        <div class="status-metric">
+                            <span>Assigned Packaging Specialist</span>
+                            <strong id="specialistName">-</strong>
+                        </div>
+                    </div>
+
+                    <div class="status-confidence-card">
+                        <div class="status-confidence-copy">
+                            <span>Delivery Confidence Meter</span>
+                            <strong id="confidenceValue">98%</strong>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceFill"></div>
+                        </div>
+                        <p id="smartNotification">Your magnetic rigid box manufacturing has started.</p>
+                    </div>
+                </div>
+
+                <div class="status-client-card">
+                    <div>
+                        <p class="eyebrow">Client Dashboard Card</p>
+                        <h3>Project Snapshot</h3>
+                    </div>
+                    <div class="snapshot-grid">
+                        <div><span>Product Ordered</span><strong id="snapshotProduct">Magnetic Rigid Box</strong></div>
+                        <div><span>Quantity</span><strong id="snapshotQuantity">2,500 Units</strong></div>
+                        <div><span>Material Type</span><strong id="snapshotMaterial">Rigid Board + Wrap</strong></div>
+                        <div><span>Box Dimensions</span><strong id="snapshotDimensions">240 x 180 x 80 mm</strong></div>
+                        <div><span>Finish Selected</span><strong id="snapshotFinish">Soft-touch Matte</strong></div>
+                        <div><span>Manufacturing Progress</span><strong id="snapshotProgress">58%</strong></div>
+                    </div>
+                </div>
+
+                <div class="status-journey-layout">
+                    <div class="status-journey-card">
+                        <div class="journey-header">
+                            <div>
+                                <p class="eyebrow">Packaging Journey</p>
+                                <h3>Manufacturing Timeline</h3>
+                            </div>
+                            <div class="journey-stats">
+                                <span id="progressPercent">58% complete</span>
+                                <span id="estimatedTimeline">5 business days remaining</span>
+                            </div>
+                        </div>
+
+                        <div class="journey-progress-rail">
+                            <div class="journey-progress-fill" id="journeyProgressFill"></div>
+                            <div class="delivery-truck" id="deliveryTruck"><i class="ri-truck-line"></i></div>
+                        </div>
+
+                        <div class="status-stage-list" id="statusStageList"></div>
+                    </div>
+
+                    <div class="status-visual-card">
+                        <div>
+                            <p class="eyebrow">Realistic Package Visual</p>
+                            <h3>Live Project Preview</h3>
+                        </div>
+                        <div class="tracking-visual-scene">
+                            <div class="tracking-box">
+                                <div class="tracking-box-lid">
+                                    <img src="assets/packworks_logo.png" alt="PackWorks">
+                                </div>
+                                <div class="tracking-box-base">
+                                    <span id="trackingProductLabel">MAGNETIC RIGID BOX</span>
+                                </div>
+                                <div class="tracking-particles">
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="status-visual-footer">
+                            <span id="trackingEta">ETA: 19 May 2026</span>
+                            <span id="trackingFacility">Facility: Mohali Unit 02</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="navbar" class="glass-nav">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <img src="assets/packworks_logo.png" alt="PackWorks" class="logo-img" onerror="this.src=''; this.alt='PackWorks';">
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#about">About</a>
+                <a href="#vision">Vision</a>
+                <a href="#products">Products</a>
+                <a href="#process">Process</a>
+                <a href="#technology">Studio</a>
+                <a href="#contact">Contact</a>
+                <button type="button" class="nav-status-link open-status">Project Status</button>
+            </div>
+            <div class="nav-actions">
+                <a href="investors.html" class="btn-outline">Fund Us</a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation"><i class="ri-menu-3-line"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="hero-section">
+            <div class="container hero-content">
+                <div class="hero-text" data-reveal data-parallax="0.12">
+                    <p class="eyebrow">Design-Led Packaging Studio</p>
+                    <h1>Packaging solutions for <br><span class="gradient-text">All brands</span></h1>
+                    <p>PackWorks helps Indian D2C brands move from concept to production-ready packaging through one design-led, tech-enabled workflow.</p>
+                    <div class="hero-cta">
+                        <a href="#products" class="btn-primary">Explore Products</a>
+                        <a href="#contact" class="btn-secondary glow-hover">Book Consultation</a>
+                        <button type="button" class="btn-outline open-status">Track Project</button>
+                    </div>
+                    <div class="hero-metrics">
+                        <div class="hero-metric-card">
+                            <span>Million D2C Packages / Month</span>
+                            <strong data-counter="100">0</strong>
+                        </div>
+                        <div class="hero-metric-card">
+                            <span>Brands in the ₹50L-₹5Cr Segment</span>
+                            <strong data-counter="50000">0</strong>
+                        </div>
+                        <div class="hero-metric-card">
+                            <span>Packaging Market CAGR</span>
+                            <strong data-counter="26">0</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual" data-reveal data-parallax="0.08">
+                    <div class="hero-visual-shell">
+                        <div class="hero-visual-badge">Design-to-delivery ecosystem</div>
+                        <img src="assets/packworks_hero_futuristic.png" alt="Packaging Box" class="hero-mockup-rotate" onerror="this.src='';">
+                        <div class="hero-floating-card card-top">
+                            <span>AI Packaging Studio</span>
+                            <strong>Realtime 3D Mockup Engine</strong>
+                        </div>
+                        <div class="hero-floating-card card-bottom">
+                            <span>Custom Packaging Intelligence</span>
+                            <strong>Smart Manufacturing Workflow</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="trust-marquee-wrapper">
+            <div class="marquee-scroller">
+                <div class="fake-brand"><i class="ri-brush-ai-fill"></i> Design-Led Packaging</div>
+                <div class="fake-brand"><i class="ri-box-3-fill"></i> Low MOQ Execution</div>
+                <div class="fake-brand"><i class="ri-time-fill"></i> 1-2 Week Delivery</div>
+                <div class="fake-brand"><i class="ri-git-merge-fill"></i> Design to Production</div>
+                <div class="fake-brand"><i class="ri-building-2-fill"></i> India Manufacturer Network</div>
+                <div class="fake-brand"><i class="ri-brush-ai-fill"></i> Design-Led Packaging</div>
+                <div class="fake-brand"><i class="ri-box-3-fill"></i> Low MOQ Execution</div>
+                <div class="fake-brand"><i class="ri-time-fill"></i> 1-2 Week Delivery</div>
+                <div class="fake-brand"><i class="ri-git-merge-fill"></i> Design to Production</div>
+                <div class="fake-brand"><i class="ri-building-2-fill"></i> India Manufacturer Network</div>
+            </div>
+        </div>
+
+        <section id="about">
+            <div class="container split-layout center-v">
+                <div class="about-text" data-reveal>
+                    <p class="eyebrow">Company Overview</p>
+                    <h2>PackWorks is a full-stack packaging studio built for Indian D2C brands.</h2>
+                    <p>We combine packaging design, manufacturing access, and packaging technology so growing brands can build premium unboxing systems without agency-scale budgets or high-MOQ barriers.</p>
+                </div>
+                <div class="about-stats" data-reveal>
+                    <div class="stat-card glass-card">
+                        <h3 class="text-neon-blue">2025</h3>
+                        <p>Founded</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3 class="text-hot-pink">100M+</h3>
+                        <p>D2C Packages / Month in India</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3 class="text-neon-green">500</h3>
+                        <p>MOQ Capability</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3 class="gradient-text">1-2</h3>
+                        <p>Weeks Turnaround</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vision" class="bg-darker">
+            <div class="container split-layout">
+                <div class="glass-card vision-card" data-reveal>
+                    <p class="eyebrow">Our Vision</p>
+                    <h2 class="text-neon-blue">Build the design-first packaging standard Indian D2C brands deserve.</h2>
+                    <p>PackWorks exists to bring the beauty, structure, and brand storytelling discipline seen in world-class packaging to fast-growing brands across India.</p>
+                </div>
+                <div class="glass-card vision-card" data-reveal>
+                    <p class="eyebrow">Our Mission</p>
+                    <h2 class="text-hot-pink">Take brands from concept to finished packaging under one roof.</h2>
+                    <p>Our mission is to deliver production-ready, brand-perfect packaging in 1-2 weeks through one connected workflow spanning strategy, design, manufacturing, and delivery coordination.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="story">
+            <div class="container split-layout center-v">
+                <div data-reveal data-parallax="0.08">
+                    <p class="eyebrow">Inspired by Japan</p>
+                    <h2>Inspired by <span class="gradient-text">Japan</span></h2>
+                    <p class="story-copy">Japanese packaging is a cultural art form where functionality, aesthetics, and brand storytelling live inside the same box. Customers keep it because it feels intentional.</p>
+                    <p class="story-copy">PackWorks brings that standard to Indian D2C brands by treating packaging as a marketing channel, a retention layer, and a physical brand moment instead of a forgotten logistics cost.</p>
+                </div>
+                <div class="story-visual" data-reveal data-parallax="0.05">
+                    <img src="assets/japan_packaging_luxury.png" alt="Japanese Luxury Packaging" onerror="this.src='';">
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="bg-darker">
+            <div class="container">
+                <div class="section-header" data-reveal>
+                    <p class="eyebrow">Packaging Products</p>
+                    <h2>Packaging formats designed for shelf-ready, shipment-ready, and story-rich brands.</h2>
+                    <p>Built for beauty, fashion, F&amp;B, lifestyle, subscription, and consumer startups that need premium packaging without long agency cycles.</p>
+                </div>
+                <div class="product-grid" id="productGrid"></div>
+            </div>
+        </section>
+
+        <section id="process">
+            <div class="container">
+                <div class="section-header center" data-reveal>
+                    <p class="eyebrow">Our Process</p>
+                    <h2>How PackWorks moves from brief to finished packaging in one workflow.</h2>
+                </div>
+                <div class="timeline process-grid" id="processGrid"></div>
+            </div>
+        </section>
+
+        <section id="technology" class="bg-darker">
+            <div class="container">
+                <div class="section-header" data-reveal>
+                    <p class="eyebrow">PackWorks AI Packaging Studio</p>
+                    <h2>Preview structural packaging, artwork, and finish decisions before production starts.</h2>
+                    <p>Upload artwork, map it to the packaging surface, tune materials and lighting, and export a polished presentation-ready mockup.</p>
+                </div>
+                <div class="mockup-ui" data-reveal>
+                    <div class="ui-sidebar">
+                        <div class="ui-panel">
+                            <h4>Product Type</h4>
+                            <div class="chip-group">
+                                <button type="button" class="studio-chip active" data-product-type="box">Box</button>
+                                <button type="button" class="studio-chip" data-product-type="bag">Bag</button>
+                                <button type="button" class="studio-chip" data-product-type="pouch">Pouch</button>
+                                <button type="button" class="studio-chip" data-product-type="wrap">Bottle Wrap</button>
+                            </div>
+                        </div>
+
+                        <div class="ui-panel">
+                            <h4>Dimensions (mm)</h4>
+                            <div class="input-group three-col">
+                                <input type="number" id="dimLength" placeholder="L" value="200">
+                                <input type="number" id="dimWidth" placeholder="W" value="150">
+                                <input type="number" id="dimHeight" placeholder="H" value="50">
+                            </div>
+                        </div>
+
+                        <div class="ui-panel">
+                            <h4>Material</h4>
+                            <div class="chip-group">
+                                <button type="button" class="studio-chip active" data-material="rigid">Rigid</button>
+                                <button type="button" class="studio-chip" data-material="kraft">Kraft</button>
+                                <button type="button" class="studio-chip" data-material="gloss">Gloss</button>
+                                <button type="button" class="studio-chip" data-material="metallic">Metallic</button>
+                                <button type="button" class="studio-chip" data-material="holographic">Holographic</button>
+                                <button type="button" class="studio-chip" data-material="transparent">Transparent</button>
+                            </div>
+                        </div>
+
+                        <div class="ui-panel">
+                            <h4>Finish</h4>
+                            <div class="chip-group">
+                                <button type="button" class="studio-chip active" data-finish="matte">Matte</button>
+                                <button type="button" class="studio-chip" data-finish="soft">Soft Touch</button>
+                                <button type="button" class="studio-chip" data-finish="foil">Foil Edge</button>
+                                <button type="button" class="studio-chip" data-finish="velvet">Velvet</button>
+                                <button type="button" class="studio-chip" data-finish="clear">Transparent</button>
+                            </div>
+                        </div>
+
+                        <div class="ui-panel upload-panel">
+                            <h4>Product Image</h4>
+                            <label class="upload-dropzone" for="productImageUpload">
+                                <i class="ri-upload-cloud-2-line"></i>
+                                <span>Upload product image</span>
+                                <small>PNG, JPG or WEBP</small>
+                            </label>
+                            <input type="file" id="productImageUpload" accept="image/png,image/jpeg,image/webp">
+                            <p id="uploadStatus" class="upload-status">Preview will appear in the studio instantly.</p>
+                        </div>
+
+                        <div class="ui-panel">
+                            <h4>Branding</h4>
+                            <label class="studio-label">Print Zone
+                                <select id="printZoneSelect">
+                                    <option value="lid">Box Lid</option>
+                                    <option value="front">Front Panel</option>
+                                    <option value="inside">Inside Panel</option>
+                                </select>
+                            </label>
+                            <label class="studio-label">Blend Mode
+                                <select id="blendModeSelect">
+                                    <option value="multiply">Print Blend</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="overlay">Overlay</option>
+                                    <option value="screen">Screen</option>
+                                    <option value="soft-light">Soft Light</option>
+                                </select>
+                            </label>
+                            <label class="studio-label">Print Effect
+                                <select id="printEffectSelect">
+                                    <option value="standard">Standard Ink</option>
+                                    <option value="foil">Foil</option>
+                                    <option value="gloss">Gloss</option>
+                                    <option value="metallic">Metallic</option>
+                                    <option value="holographic">Holographic</option>
+                                    <option value="uv">UV Spot</option>
+                                    <option value="emboss">Emboss</option>
+                                    <option value="deboss">Deboss</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="ui-panel sliders-grid">
+                            <label class="studio-label">Artwork Size <input type="range" id="artworkScale" min="50" max="180" value="100"></label>
+                            <label class="studio-label">Artwork Rotation <input type="range" id="artworkRotate" min="-180" max="180" value="0"></label>
+                            <label class="studio-label">Corner Fit <input type="range" id="cornerFit" min="0" max="80" value="10"></label>
+                            <label class="studio-label">Effect Intensity <input type="range" id="effectIntensity" min="0" max="100" value="50"></label>
+                            <label class="studio-label">Studio Zoom <input type="range" id="studioZoom" min="80" max="150" value="100"></label>
+                            <label class="studio-label">Packaging Angle <input type="range" id="studioAngle" min="-25" max="25" value="-12"></label>
+                            <label class="studio-label">Shadow Intensity <input type="range" id="shadowIntensity" min="10" max="90" value="45"></label>
+                            <label class="studio-label">Reflection Strength <input type="range" id="reflectionStrength" min="0" max="100" value="38"></label>
+                            <label class="studio-label">Ambient Lighting <input type="range" id="ambientLighting" min="0" max="100" value="54"></label>
+                            <label class="studio-label">Glow Intensity <input type="range" id="glowIntensity" min="0" max="100" value="36"></label>
+                            <label class="studio-label">Artwork Opacity <input type="range" id="artworkOpacity" min="10" max="100" value="100"></label>
+                            <label class="studio-label">Perspective Fit <input type="range" id="perspectiveFit" min="-40" max="40" value="0"></label>
+                        </div>
+
+                        <div class="ui-panel">
+                            <h4>Background</h4>
+                            <label class="studio-label color-row">Color <input type="color" id="bgColorPicker" value="#101010"></label>
+                            <div class="color-meta-grid">
+                                <label class="studio-label">HEX <input type="text" id="hexInput" value="#101010"></label>
+                                <label class="studio-label">R <input type="number" id="rgbR" min="0" max="255" value="16"></label>
+                                <label class="studio-label">G <input type="number" id="rgbG" min="0" max="255" value="16"></label>
+                                <label class="studio-label">B <input type="number" id="rgbB" min="0" max="255" value="16"></label>
+                            </div>
+                            <label class="studio-label" style="flex-direction: row; justify-content: space-between; align-items: center; margin-top: 12px; margin-bottom: 12px;">
+                                Transparent Export <input type="checkbox" id="transparentExport" style="width: auto; accent-color: var(--electric-blue);">
+                            </label>
+                            <div class="gradient-swatches">
+                                <button type="button" class="gradient-swatch active" data-gradient="grid-dark"></button>
+                                <button type="button" class="gradient-swatch" data-gradient="midnight"></button>
+                                <button type="button" class="gradient-swatch" data-gradient="neon-rise"></button>
+                                <button type="button" class="gradient-swatch" data-gradient="industrial"></button>
+                                <button type="button" class="gradient-swatch" data-gradient="showroom"></button>
+                                <button type="button" class="gradient-swatch" data-gradient="white-room"></button>
+                            </div>
+                        </div>
+
+                        <div class="ui-panel action-stack">
+                            <button type="button" class="btn-secondary" id="toggleGlow">Toggle Neon Glow</button>
+                            <button type="button" class="btn-outline" id="resetStudio">Reset Studio</button>
+                            <button type="button" class="btn-primary" id="exportMockup">Export PNG</button>
+                        </div>
+                    </div>
+
+                    <div class="ui-canvas">
+                        <div class="mockup-stage theme-grid-dark" id="mockupStage">
+                            <div class="mockup-toolbar">
+                                <span></span><span></span><span></span>
+                                <strong>AI Packaging Studio</strong>
+                            </div>
+                            <div class="mockup-preview-shell" id="mockupPreviewShell">
+                                <div class="studio-particles">
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                                <div class="mockup-scene-light"></div>
+                                <div class="studio-pack type-box material-rigid finish-matte logo-auto" id="studioPack">
+                                    <div class="mockup-product-frame">
+                                        <img src="assets/magnetic_box.png" alt="Packaging mockup" class="mockup-product-image" id="mockupProductImage">
+                                        <div class="surface-layer">
+                                            <div class="artwork-layer" id="artworkLayer">
+                                                <img id="uploadedProductPreview" alt="">
+                                            </div>
+                                            <div class="surface-shine"></div>
+                                        </div>
+                                    </div>
+                                    <div class="studio-shadow" id="studioShadow"></div>
+                                </div>
+                            </div>
+                            <div class="mockup-controls">
+                                <span id="mockupInfoType">Type: Box</span>
+                                <span id="mockupInfoMaterial">Material: Rigid</span>
+                                <span id="mockupInfoDimensions">200 x 150 x 50 mm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials">
+            <div class="container testimonials-wrapper">
+                <div class="section-header center" data-reveal>
+                    <p class="eyebrow">Why This Matters</p>
+                    <h2>The packaging gap for growing Indian D2C brands is real.</h2>
+                </div>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card glass-card" data-reveal>
+                        <p>"Most growing brands invest in product quality and digital marketing, then ship in generic boxes. PackWorks is built to close that exact gap."</p>
+                        <div class="author">
+                            <div class="avatar-circle img-gradient-1"></div>
+                            <div>
+                                <h4>Problem</h4>
+                                <p>Generic packaging weakens brand recall</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card glass-card" data-reveal>
+                        <p>"Premium agencies are too expensive, manufacturers ask for high MOQs, and brands are left managing fragmented vendors. The workflow needs one roof."</p>
+                        <div class="author">
+                            <div class="avatar-circle img-gradient-2"></div>
+                            <div>
+                                <h4>Gap</h4>
+                                <p>No affordable design-to-production stack</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card glass-card" data-reveal>
+                        <p>"The opportunity sits where affordability, low MOQ, fast turnaround, and design-led packaging finally meet for Indian D2C brands."</p>
+                        <div class="author">
+                            <div class="avatar-circle img-gradient-3"></div>
+                            <div>
+                                <h4>Edge</h4>
+                                <p>Full-stack packaging for the ₹50L-₹5Cr segment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="bg-darker">
+            <div class="container contact-container">
+                <div class="contact-copy" data-reveal>
+                    <p class="eyebrow">Start Your Packaging Project</p>
+                    <h2>Tell us what you are building and we will map the right packaging path.</h2>
+                    <div class="contact-details">
+                        <div class="contact-detail-card">
+                            <i class="ri-mail-line"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>packsworks.feels@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail-card">
+                            <i class="ri-phone-line"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <p>+91 99885 22870</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail-card">
+                            <i class="ri-timer-line"></i>
+                            <div>
+                                <h4>Workflow</h4>
+                                <p>Design, consultation, manufacturer coordination, and delivery planning under one workflow.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form glass-card" data-reveal>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Company</label>
+                                <input type="text" placeholder="Your Brand Name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" placeholder="email@company.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Order Volume</label>
+                                <input type="text" placeholder="MOQ, monthly run, or pilot quantity">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>How can we help?</label>
+                                <textarea rows="5" placeholder="Share your product category, packaging type, quantity, and timeline..."></textarea>
+                        </div>
+                        <button type="button" class="btn-primary glow-hover">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer bg-main">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <img src="assets/packworks_logo.png" alt="PackWorks" class="footer-logo" onerror="this.src='';">
+                <p>PackWorks is a design-led, tech-enabled packaging studio helping Indian D2C brands move from concept to finished packaging in days, not months.</p>
+            </div>
+            <div class="footer-col footer-links">
+                <h4>Company</h4>
+                <a href="#about">What We Do</a>
+                <a href="#vision">Mission & Vision</a>
+                <a href="#process">Our Process</a>
+                <a href="investors.html">Investor Relations</a>
+            </div>
+            <div class="footer-col footer-links">
+                <h4>Support</h4>
+                <a href="#technology">3D Packaging Studio</a>
+                <a href="#contact">Contact Us</a>
+                <a href="#products">Packaging Products</a>
+                <button type="button" class="footer-status-link open-status">Project Status Portal</button>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 PackWorks. All Rights Reserved.</p>
+            <div class="footer-socials">
+                <a href="#contact" aria-label="Email"><i class="ri-mail-line"></i></a>
+                <a href="https://wa.me/919988522870" aria-label="WhatsApp"><i class="ri-whatsapp-line"></i></a>
+                <a href="#products" aria-label="Products"><i class="ri-shopping-bag-3-line"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
