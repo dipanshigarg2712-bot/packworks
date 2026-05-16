@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         uploadedName: "",
         artworkAspect: 1,
         printZone: "lid",
-        blendMode: "multiply",
+        blendMode: "normal",
         printEffect: "standard",
         assistantSuggestedType: "box"
     };
@@ -94,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const trackingStages = [
         "Order Confirmed",
         "Packaging Design Started",
-        "Mockup Approved",
         "Material Procurement",
         "Manufacturing in Progress",
         "Quality Check",
@@ -111,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             material: "Rigid Board + Wrap",
             dimensions: "240 x 180 x 80 mm",
             finish: "Soft-touch Matte",
-            specialist: "PackWorks Design Team",
+            specialist: "Packworks Design Team",
             facility: "Partner Network - Delhi / Mumbai / Bangalore"
         },
         {
@@ -120,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             material: "Premium Art Paper",
             dimensions: "320 x 120 x 420 mm",
             finish: "Matte + Rope Handle",
-            specialist: "PackWorks Operations Team",
+            specialist: "Packworks Operations Team",
             facility: "Partner Network - Surat / Ahmedabad"
         },
         {
@@ -129,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
             material: "Multi-layer Flexible Laminate",
             dimensions: "160 x 240 x 70 mm",
             finish: "Gloss Barrier Finish",
-            specialist: "PackWorks Category Team",
+            specialist: "Packworks Category Team",
             facility: "Partner Network - Delhi / Bangalore"
         },
         {
@@ -138,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
             material: "Shrink Sleeve Film",
             dimensions: "65 x 210 mm",
             finish: "Gloss UV",
-            specialist: "PackWorks Production Team",
+            specialist: "Packworks Production Team",
             facility: "Partner Network - Mumbai / Delhi"
         }
     ];
@@ -513,14 +512,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const getMockupAsset = () => {
+        let assetPath = mockupAssets.box;
         if (state.productType === "bag") {
-            return state.material === "kraft" ? mockupAssets.kraft : mockupAssets.bag;
+            assetPath = state.material === "kraft" ? mockupAssets.kraft : mockupAssets.bag;
+        } else if (state.productType === "wrap") {
+            assetPath = state.material === "transparent" || state.finish === "clear" ? mockupAssets.label : mockupAssets.wrap;
+        } else if (state.productType === "pouch") {
+            assetPath = mockupAssets.pouch;
         }
-        if (state.productType === "wrap") {
-            return state.material === "transparent" || state.finish === "clear" ? mockupAssets.label : mockupAssets.wrap;
-        }
-        if (state.productType === "pouch") return mockupAssets.pouch;
-        return mockupAssets.box;
+        return assetPath.replace("assets/", "assets/blank_");
     };
 
     const recommendedScaleForType = () => {
@@ -641,13 +641,8 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     };
 
-    const applyStudioState = () => {
-        if (!studioPack || !mockupPreviewShell) return;
-        studioPack.classList.remove("type-box", "type-bag", "type-pouch", "type-wrap", "material-rigid", "material-kraft", "material-gloss", "material-metallic", "material-holographic", "material-transparent", "finish-matte", "finish-soft", "finish-foil", "finish-velvet", "finish-clear", "neon-glow", "effect-standard", "effect-foil", "effect-gloss", "effect-metallic", "effect-holographic", "effect-uv", "effect-emboss", "effect-deboss");
-        studioPack.classList.add(`type-${state.productType}`, `material-${state.material}`, `finish-${state.finish}`);
-        studioPack.classList.add(`effect-${state.printEffect}`);
-        if (state.glow) studioPack.classList.add("neon-glow");
-        studioPack.classList.toggle("has-art", Boolean(state.uploadedImage));
+    const updateStudioInfo = () => {
+        if (!mockupInfoType || !mockupInfoMaterial || !mockupInfoDimensions) return;
         const dimensions = `${dimLength.value} x ${dimWidth.value} x ${dimHeight.value} mm`;
         mockupInfoType.textContent = `Type: ${productTypeLabel(state.productType)}`;
         mockupInfoMaterial.textContent = `Material: ${materialLabel(state.material)}`;
@@ -660,6 +655,8 @@ document.addEventListener("DOMContentLoaded", () => {
         studioPack.classList.add(`type-${state.productType}`, `material-${state.material}`, `finish-${state.finish}`);
         studioPack.classList.add(`effect-${state.printEffect}`);
         if (state.glow) studioPack.classList.add("neon-glow");
+        studioPack.classList.toggle("has-art", Boolean(state.uploadedImage));
+        
         const preset = getSurfacePreset();
         studioPack.style.setProperty("--pack-angle", `${state.angle}deg`);
         studioPack.style.setProperty("--pack-shadow-alpha", `${state.shadow / 100}`);
@@ -674,6 +671,8 @@ document.addEventListener("DOMContentLoaded", () => {
         studioPack.style.setProperty("--surface-rotate", `${preset.rotation}deg`);
         studioPack.style.setProperty("--surface-skew-x", `${preset.skewX + state.perspectiveFit * 0.2}deg`);
         studioPack.style.setProperty("--surface-skew-y", `${preset.skewY}deg`);
+
+        artworkLayer?.style.setProperty("--artwork-blend", state.blendMode);
         studioPack.style.setProperty("--surface-radius", `${state.cornerFit}px`);
         mockupPreviewShell.style.setProperty("--preview-zoom", `${state.zoom}`);
         artworkLayer?.style.setProperty("--artwork-scale", `${state.scale}`);
@@ -903,7 +902,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.backgroundColor = "#101010";
         state.artworkAspect = 1;
         state.printZone = "lid";
-        state.blendMode = "multiply";
+        state.blendMode = "normal";
         state.printEffect = "standard";
         dimLength.value = 200;
         dimWidth.value = 150;
@@ -927,7 +926,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (rgbG) rgbG.value = 16;
         if (rgbB) rgbB.value = 16;
         if (printZoneSelect) printZoneSelect.value = "lid";
-        if (blendModeSelect) blendModeSelect.value = "multiply";
+        if (blendModeSelect) blendModeSelect.value = "normal";
         if (printEffectSelect) printEffectSelect.value = "standard";
         toggleGlow.textContent = "Toggle Neon Glow";
         state.uploadedImage = "";
@@ -1150,7 +1149,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!state.transparentExport) {
             ctx.fillStyle = "rgba(255,255,255,0.78)";
             ctx.font = "700 32px Inter";
-            ctx.fillText("PackWorks AI Packaging Studio", 80, 84);
+            ctx.fillText("Packworks AI Packaging Studio", 80, 84);
             ctx.fillStyle = "rgba(255,255,255,0.52)";
             ctx.font = "500 20px Inter";
             ctx.fillText(`${state.productType.toUpperCase()}  |  ${state.material.toUpperCase()}  |  ${dimLength.value} x ${dimWidth.value} x ${dimHeight.value} mm`, 80, 122);
